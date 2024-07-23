@@ -34,6 +34,7 @@ class WebVTTConverter(BaseConverter):
         current_style = []
 
         css_parser = tinycss.make_parser('page3')
+        timestamp_pattern = re.compile(r'^\d{1,2}:\d{2}:\d{2}(?:\.\d{1,3})? --> \d{1,2}:\d{2}:\d{2}(?:\.\d{1,3})?(?: .*)?$')
 
         for line in stream:
             # As our stream is bytes we have to deal with line breaks here
@@ -79,7 +80,7 @@ class WebVTTConverter(BaseConverter):
                 current_style.append(line)
 
             # Check for time line
-            elif '-->' in line:
+            elif '-->' in line and timestamp_pattern.match(line):
                 parts = line.strip().split()
                 position = self._get_position([p for p in parts[3:] if ':' in p])
 
