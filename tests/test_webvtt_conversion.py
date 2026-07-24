@@ -134,3 +134,16 @@ if __name__ == "__main__":
     test_sorting_same_times_by_position()
     test_parsing_unseparated_lines()
     test_parsing_misconverted_srt_lines()
+
+def test_caption_text_containing_arrow_is_not_a_cue():
+    converter = WebVTTConverter()
+    stream = BytesIO(b"""WEBVTT
+
+00:00:01.000 --> 00:00:03.000
+Move left --> then right
+
+00:00:04.000 --> 00:00:05.000
+Next cue
+""")
+    srt = converter.parse(stream)
+    assert [line.content for line in srt] == ["Move left --> then right", "Next cue"]

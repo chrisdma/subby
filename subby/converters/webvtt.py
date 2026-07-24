@@ -80,7 +80,7 @@ class WebVTTConverter(BaseConverter):
                 current_style.append(line)
 
             # Check for time line
-            elif ' --> ' in line:
+            elif re.fullmatch(rf"(?:{line_number} )?(?:\d{{1,2}}:)?\d{{2}}:\d{{2}}(?:[.,]\d{{1,3}})? --> (?:\d{{1,2}}:)?\d{{2}}:\d{{2}}(?:[.,]\d{{1,3}})?\.?(?: .*)?", line):
                 # Time line should always cause a line split, even without a separating new line
                 if looking_for_text and text and srt:
                     srt[-1].content = '\n'.join(text)
